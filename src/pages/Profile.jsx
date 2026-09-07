@@ -286,9 +286,9 @@ const Profile = ({ audioRef }) => {
               </div>
             )}
             <div className="flex gap-4 sm:gap-6 md:gap-8 bg-pink-400 rounded-2xl px-4 py-2 sm:px-6 sm:py-3 mt-4 sm:mt-6 justify-center shadow-lg overflow-hidden">
-              <button className="hover:scale-110 transition-transform">
+              <div className="hover:scale-110 transition-transform">
                 <HeartButton />
-              </button>
+              </div>
               <button
                 onClick={() => handleCommentClick(whisper)}
                 className="hover:scale-110 transition-transform"

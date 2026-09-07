@@ -47,7 +47,7 @@ const Signup = () => {
        // 2. Generate a default avatar
     const username = (email || "").split("@")[0];
     const randomNumber = Math.floor(Math.random() * (100 - 20 + 1)) + 20;
-    const avatarUrl = `https://avatar.iran.liara.run/public/${randomNumber}`;
+    const avatarUrl = `https://api.dicebear.com/7.x/adventurer/svg?seed=${username}`;
 
     let storedAvatarUrl = avatarUrl; // fallback if fetch/upload fails
     try {

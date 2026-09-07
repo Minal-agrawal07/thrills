@@ -236,7 +236,7 @@ const Chatbox = () => {
               key={chat.id}
               onClick={() => handleChatCardClick(chat)}
             >
-              <img src={chat.otherUser?.profilepic || "https://avatar.iran.liara.run/public/84"} alt="avatar" className="h-10 w-10 rounded-full" />
+              <img src={chat.otherUser?.profilepic || "https://api.dicebear.com/7.x/adventurer/svg?seed=default"} alt="avatar" className="h-10 w-10 rounded-full" />
               <div>
                 <p className="font-semibold text-[#784552]">{chat.otherUser?.username || "Loading..."}</p>
                 <p className="message">{chat.lastMessage}</p>
@@ -255,8 +255,7 @@ const Chatbox = () => {
                 className="text-white text-2xl cursor-pointer sm:hidden"
                 onClick={handleBackClick}
               />
-              <img src={selectedChat.otherUser?.profilepic || "https://avatar.iran.liara.run/public/84"} alt="avatar" className="h-12 w-12 rounded-full" />
-              <p className="text-lg font-bold text-white">{selectedChat.otherUser?.username || "Loading..."}</p>
+              <img src={selectedChat.otherUser?.profilepic || "https://api.dicebear.com/7.x/adventurer/svg?seed=default"} alt="avatar" className="h-12 w-12 rounded-full" />
             </div>
             <div className="flex-1 overflow-y-auto py-4">
               {messages.map((msg, i) => (

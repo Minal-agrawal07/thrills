@@ -67,7 +67,7 @@ const Home = () => {
       >
         click here to continue →
       </button>
-      <style jsx>{`
+      <style>{`
         @keyframes float-heart {
           0% {
             transform: translateY(0) scale(1);
