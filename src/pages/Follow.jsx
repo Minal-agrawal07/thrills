@@ -682,8 +682,8 @@ const Follow = () => {
       <div className="flex flex-wrap justify-center gap-4 md:gap-1 lg:gap-4 mt-4">
         {error && <div className="text-red-500 bg-white p-4 rounded-lg mx-4">{error}</div>}
         {whispers.length === 0 && !error && (
-          <DreamyLoader/>
-        )}
+  <div style={{textAlign:'center', padding:'40px', color:'white'}}>No whispers posted yet.</div>
+)}
         {whispers.map((whisperData) => {
           const isLockedByDistance = (whisperData.distance ?? Infinity) > maxDistance;
           const isUnlocked = unlockedWhisperIds.includes(whisperData.id);

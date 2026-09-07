@@ -28,6 +28,8 @@ const Whispers = () => {
   const [unlockedWhisperIds, setUnlockedWhisperIds] = useState([]);
   const [userPreferences, setUserPreferences] = useState({ trigger_words: [], profanity_filter: true });
   const [filteredCount, setFilteredCount] = useState(0);
+ 
+  const [whispersLoading, setWhispersLoading] = useState(true);
   
   const maxDistance = 1.2;
 
@@ -69,6 +71,7 @@ const Whispers = () => {
 
         if (userError) {
           console.error("Error fetching user data:", userError);
+          setWhispersLoading(false);
           return;
         }
 
@@ -113,6 +116,7 @@ const Whispers = () => {
 
       if (error) {
         setError(error.message);
+        setWhispersLoading(false);
         return;
       }
 
@@ -170,6 +174,7 @@ const Whispers = () => {
       
       whispersWithDistance.sort((a, b) => a.distance - b.distance);
       setWhispers(whispersWithDistance);
+      setWhispersLoading(false);
     }
     
     fetchWhispersAndPoints();
@@ -185,7 +190,8 @@ const Whispers = () => {
 
   if (error) return <div>Error: {error}</div>;
   if (isLocationLoading) return <DreamyLoader />; 
-  if (!whispers.length) return <DreamyLoader />; 
+  if (whispersLoading) return <DreamyLoader />; 
+  if (!whispers.length) return <div style={{textAlign:'center', padding:'40px', color:'#FFD6BA'}}>No whispers nearby yet — be the first to post one!</div>;
 
   return (
     <div>

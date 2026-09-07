@@ -44,26 +44,31 @@ const Signup = () => {
     }
 
     // 2. Generate a default avatar
+       // 2. Generate a default avatar
     const username = (email || "").split("@")[0];
     const randomNumber = Math.floor(Math.random() * (100 - 20 + 1)) + 20;
     const avatarUrl = `https://avatar.iran.liara.run/public/${randomNumber}`;
 
-    // Fetch the avatar as a blob
-    const res = await fetch(avatarUrl);
-    if (!res.ok) throw new Error("Failed to fetch avatar");
-    const blob = await res.blob();
-    const file = new File([blob], `${username}-avatar.png`, { type: blob.type });
+    let storedAvatarUrl = avatarUrl; // fallback if fetch/upload fails
+    try {
+      // Fetch the avatar as a blob
+      const res = await fetch(avatarUrl);
+      if (!res.ok) throw new Error("Failed to fetch avatar");
+      const blob = await res.blob();
+      const file = new File([blob], `${username}-avatar.png`, { type: blob.type });
 
-    // 3. Upload to Supabase Storage
-    const { data: storageData, error: storageError } = await supabase.storage
-      .from("avatars") // your bucket name
-      .upload(`public/${username}.png`, file, { upsert: true });
+      // 3. Upload to Supabase Storage
+      const { data: storageData, error: storageError } = await supabase.storage
+        .from("avatars") // your bucket name
+        .upload(`public/${username}.png`, file, { upsert: true });
 
-    let storedAvatarUrl = avatarUrl; // fallback
-    if (storageError) {
-      console.warn("Error uploading avatar:", storageError.message);
-    } else if (storageData?.path) {
-      storedAvatarUrl = supabase.storage.from("avatars").getPublicUrl(storageData.path).publicUrl;
+      if (storageError) {
+        console.warn("Error uploading avatar:", storageError.message);
+      } else if (storageData?.path) {
+        storedAvatarUrl = supabase.storage.from("avatars").getPublicUrl(storageData.path).publicUrl;
+      }
+    } catch (avatarErr) {
+      console.warn("Avatar generation skipped:", avatarErr.message);
     }
 
     // 4. Insert into users table with starting points = 20
@@ -77,7 +82,8 @@ const Signup = () => {
       });
 
     if (insertError && insertError.code !== "23505") {
-      console.warn("Could not insert into users table:", insertError.message);
+      console.error("Could not insert into users table:", insertError);
+      alert("Profile creation failed: " + insertError.message + " (code: " + insertError.code + ")");
     }
 
     // Show welcome modal, then navigate to /post after a short delay

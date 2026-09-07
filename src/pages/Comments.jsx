@@ -123,17 +123,23 @@ const Comments = ({ audioRef }) => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!newComment.trim()) return;
-
     const {
       data: { user: currentUser },
     } = await supabase.auth.getUser();
     if (!currentUser) return alert("You must be logged in to comment!");
 
+    const { data: profile, error: profileError } = await supabase
+     .from("users")
+     .select("id")
+     .eq("user_id", currentUser.id)
+     .single();
+    if (profileError || !profile) return alert("Could not find your profile — try again.");
+
     const { error } = await supabase.from("comments").insert({
-      content: newComment,
-      user_id: currentUser.id,
-      whisper_id: whisper.id,
-    });
+     content: newComment,
+     user_id: profile.id,
+     whisper_id: whisper.id,
+});
     if (!error) setNewComment("");
   };
 
